@@ -59,6 +59,7 @@ var loadState = {
 
         // listen to file loaded event
         game.load.onFileComplete.add(this.updateProgress, this);
+        game.load.onLoadComplete.add(this.completeLoading, this);
 
         // set spinning dots
         this.dots = game.add.image(game.width / 2, game.height - 60, 'spinning_dot');
@@ -97,12 +98,34 @@ var loadState = {
 
     update: function()
     {
-        this.dots.angle += 2;
+        if (this.dots) {
+
+            this.dots.angle += 2;
+
+        }
+        
     },
 
     updateProgress: function(progress, fileKey, success, loadedFiles, files)
     {
+
         this.progress.setText('loading...' + progress + '%');
+
+    },
+
+    completeLoading: function()
+    {
+        var continueText = game.add.text(this.dots.x, this.dots.y,
+             'press Enter to continue.', 
+             { font: '18px Eras_Demi', fill: '#bdbdbd' });
+        continueText.anchor.set(0.5);
+        continueText.x = Math.floor(continueText.x) + 0.5;
+        continueText.y = Math.floor(continueText.y) + 0.5;
+        this.dots.destroy();
+
+
+        var tween = game.add.tween(continueText);
+        tween.to({alpha: 0}, 500, null, true, 500, -1, true);
     }
 
 };

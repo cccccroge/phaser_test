@@ -12,20 +12,20 @@ var bootState = {
 
         // force loading fonts
         game.add.text(0, 0, "Hello, world", { 
-            font: '84px Eras_Demi',
-            fill: '#FFFFFF'
+            font: '1px Eras_Demi',
+            fill: '#000000'
         });
 
         game.add.text(0, 0, "Hello, world", { 
-            font: '84px Sim_Sun',
-            fill: '#FFFFFF'
+            font: '1px Sim_Sun',
+            fill: '#000000'
         });
 
     },
 
     create: function()
     {
-        
+
         game.state.start('load', true, false, 1);    // 1 specify which level
 
     }
