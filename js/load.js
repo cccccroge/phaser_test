@@ -62,35 +62,21 @@ var loadState = {
         game.load.onLoadComplete.add(this.completeLoading, this);
 
         // set spinning dots
-        this.dots = game.add.image(game.width / 2, game.height - 60, 'spinning_dot');
+        this.dots = game.add.image(game.width / 2, game.height - 60, 
+            'spinning_dot');
         this.dots.anchor.set(0.5);  
+
+        // load character
+        game.load.spritesheet('green_hatter', 
+            'assets/character/green_hatter.png', 300, 400);
 
         // load all assets for given level
         var dir = this.dir;
         if (this.level === 1) {
 
-            game.load.image('img1', dir + 'back_to_menu.png');
-            game.load.image('img1', dir + 'credit.png');
-            game.load.image('img1', dir + 'fall.png');
-            game.load.image('img1', dir + 'gameover.png');
-            game.load.image('img1', dir + 'green_hatter.png');
-            game.load.image('img1', dir + 'green_hatter_large.png');
-            game.load.image('img1', dir + 'health_bar.png');
-            game.load.image('img1', dir + 'hell.png');
-            game.load.image('img1', dir + 'idle.png');
-            game.load.image('img1', dir + 'jump_down.png');
-            game.load.image('img1', dir + 'jump_off.png');
-            game.load.image('img1', dir + 'leaderboard.png');
-            game.load.image('img1', dir + 'lighter.png');
-            game.load.image('img1', dir + 'menu_background.png');
-            game.load.image('img1', dir + 'platform_cracked_dirt.png');
-            game.load.image('img1', dir + 'platform_normal_rock.png');
-            game.load.image('img1', dir + 'platform_spiking_ground.png');
-            game.load.image('img1', dir + 'play.png');
-            game.load.image('img1', dir + 'run.png');
-            game.load.image('img1', dir + 'small_cracked_dirt.png');
-            game.load.image('img1', dir + 'spiderweb_spritesheet.png');
-            game.load.image('img1', dir + 'try_again.png');
+            game.load.tilemap('level_1', dir + 'level_1.json', null, 
+                Phaser.Tilemap.TILED_JSON);
+            game.load.image('forest_tileset', dir + 'forest.png');
 
         }
 
@@ -101,6 +87,12 @@ var loadState = {
         if (this.dots) {
 
             this.dots.angle += 2;
+
+        }
+
+        if (this.enterKey.isDown) {
+
+            game.state.start('levelOne');
 
         }
         
@@ -115,6 +107,7 @@ var loadState = {
 
     completeLoading: function()
     {
+        // show continue
         var continueText = game.add.text(this.dots.x, this.dots.y,
              'press Enter to continue.', 
              { font: '18px Eras_Demi', fill: '#bdbdbd' });
@@ -123,9 +116,13 @@ var loadState = {
         continueText.y = Math.floor(continueText.y) + 0.5;
         this.dots.destroy();
 
-
+        // continue blink
         var tween = game.add.tween(continueText);
         tween.to({alpha: 0}, 500, null, true, 500, -1, true);
+
+        // add key input
+        this.enterKey = game.input.keyboard.addKey(Phaser.KeyCode.ENTER);
+
     }
 
 };
