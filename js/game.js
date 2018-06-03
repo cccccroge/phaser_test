@@ -20,6 +20,5 @@ var game = new Phaser.Game(config);
 // Add all states, run boot
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
-
 game.state.add('levelOne', levelOneState);
 game.state.start('boot');

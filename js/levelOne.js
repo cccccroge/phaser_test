@@ -11,9 +11,7 @@ var levelOneState = {
         var layer = this.map.createLayer('layer_1');
         layer.resizeWorld();
 
-        this.map.setCollisionBetween(18, 24, true, 'layer_1');
-        this.map.setCollisionBetween(35, 41, true, 'layer_1');
-        game.physics.p2.convertCollisionObjects(this.map, 'layer_2');
+        game.physics.p2.convertCollisionObjects(this.map, 'layer_collision');
 
         game.camera.setPosition(0, 360);
 
