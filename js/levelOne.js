@@ -46,7 +46,7 @@ var levelOneState = {
 
         this.playerSpeed = 300;
         this.playerJumpSpeed = 750;
-        this.playerOnGround = false;
+        //this.playerOnGround = false;
 
         this.PLAYERSTATE = {
             IDLE: 1,
@@ -93,29 +93,29 @@ var levelOneState = {
             case this.PLAYERSTATE.IDLE:
                 /*-- IDLE to RUNNING --*/
                 if (this.keyRecord['LEFT'] && !this.keyRecord['RIGHT']
-                    && this.playerOnGround) {
+                    && this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.RUNNING;
 
                 } else if (this.keyRecord['RIGHT']
                     && !this.keyRecord['LEFT']
-                    && this.playerOnGround) {
+                    && this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.RUNNING;
 
                 }
                 /*-- IDLE to JUMPING_OFF --*/
                 else if ((this.keyRecord['SPACEBAR']
-                    && this.playerOnGround)) {
+                    && this.isPlayerOnGround())) {
 
                     this.playerState = this.PLAYERSTATE.JUMPING_OFF;
                     this.player.body.velocity.y -= this.playerJumpSpeed;
-                    this.playerOnGround = false;
+                    //this.playerOnGround = false;
 
                 }
 
                 /*-- IDLE to FALLING --*/
-                if (!this.playerOnGround) {
+                if (!this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.FALLING;
 
@@ -138,16 +138,16 @@ var levelOneState = {
                 }
                 /*-- RUNNING to JUMPING_OFF --*/
                 else if (this.keyRecord['SPACEBAR']
-                      && this.playerOnGround) {
+                      && this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.JUMPING_OFF;
                     this.player.body.velocity.y -= this.playerJumpSpeed;
-                    this.playerOnGround = false;
+                    //this.playerOnGround = false;
 
                 }
 
                 /*-- RUNNING to FALLING --*/
-                if (!this.playerOnGround) {
+                if (!this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.FALLING;
 
@@ -167,7 +167,7 @@ var levelOneState = {
 
             case this.PLAYERSTATE.FALLING:
                 /*-- FALLING to JUMPING_DOWN --*/
-                if (this.playerOnGround) {
+                if (this.isPlayerOnGround()) {
   
                     this.playerState = this.PLAYERSTATE.JUMPING_DOWN;
 
@@ -198,15 +198,15 @@ var levelOneState = {
                     }, this
                 );
                 /*-- JUMPING_DOWN to JUMPING_OFF --*/
-                if (this.keyRecord['SPACEBAR'] && this.playerOnGround) {
+                if (this.keyRecord['SPACEBAR'] && this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.JUMPING_OFF;
                     this.player.body.velocity.y -= this.playerJumpSpeed;
-                    this.playerOnGround = false;
+                    //this.playerOnGround = false;
 
                 }
                 /*-- JUMPING_DOWN to FALLING --*/
-                if (!this.playerOnGround) {
+                if (!this.isPlayerOnGround()) {
 
                     this.playerState = this.PLAYERSTATE.FALLING;
 
@@ -294,6 +294,27 @@ var levelOneState = {
             
         }
         
+    },
+
+    isPlayerOnGround: function ()
+    {
+        var result = false;
+
+        for (var i = 0; i < game.physics.p2.world.narrowphase.contactEquations.length; i++) {
+
+            var c = game.physics.p2.world.narrowphase.contactEquations[i];
+            if (c.bodyA === this.player.body.data || c.bodyB === this.player.body.data) {
+
+                var yAxis = p2.vec2.fromValues(0, 1);
+                var d = p2.vec2.dot(c.normalA, yAxis);
+                if (Math.abs(d) > 0.5) result = true;
+
+            }
+
+        }
+
+        return result;
+
     }
 
 };
